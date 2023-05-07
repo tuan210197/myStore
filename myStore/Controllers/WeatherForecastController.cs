@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using myStore.Models;
 
 namespace myStore.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles =UserRoles.Admin)]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

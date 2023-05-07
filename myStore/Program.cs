@@ -11,13 +11,14 @@ ConfigurationManager _configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // For Entity Framework
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(_configuration.GetConnectionString("myStore")));
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 // For Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()

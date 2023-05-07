@@ -38,14 +38,13 @@ namespace myStore.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    //add new infomation for token :v
                     new Claim("username", user.UserName),
-                    
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
                 foreach (var userRole in userRoles)
                 {
-                    authClaims.Add(new Claim("role", userRole));
+                    authClaims.Add(new Claim("roles", userRole));
                 }
 
                 var token = GetToken(authClaims);
@@ -119,7 +118,8 @@ namespace myStore.Controllers
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
             var token = new JwtSecurityToken(
-                
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
                 expires: DateTime.Now.AddMinutes(5),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
